@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 # Load data
 df = pd.read_csv("btw25.tsv", sep="\t", quoting=3)
 
+st.write("### Wahlprogramm-Heatmap")
+
 # Dropdown for part-of-speech selection
 pos_options = ["NN", "ADJ", "VV"]
 selected_pos = st.selectbox("Wähle die Wortart aus:", pos_options)
@@ -27,7 +29,6 @@ matrix = top_df.pivot_table(index='lemma', columns='party', values='relative_fre
 matrix = matrix.fillna(0)
 
 # Plot heatmap
-st.write("### Wahlprogramm-Heatmap")
 plt.figure(figsize=(3, 6))
 sns.set_theme(style="whitegrid")
 chart = sns.heatmap(data=matrix, annot=False, cmap="Reds")
