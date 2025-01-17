@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load data
-df = pd.read_csv("/Users/simon/Korpora/Politik/BTW25/Wahlprogramme/btw25.tsv", sep="\t", quoting=3)
+df = pd.read_csv("btw25.tsv", sep="\t", quoting=3)
 
 # Dropdown for part-of-speech selection
 pos_options = ["NN", "ADJ", "VV"]
