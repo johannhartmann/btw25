@@ -127,7 +127,7 @@ if lemma:
 
 with st.expander("Für Informationen zu diesem Tool hier klicken!"):
     st.write("""
-    ## Daten und Methode
+    ### Daten und Methode
 
     Dieses interaktive Tool erlaubt die Abfrage von Worthäufigkeiten in den Wahlprogrammen zur Bundestagswahl 2025. Datengrundlage sind die (im Falle der AfD und der Linken vorläufigen) Wahlprogramme im PDF-Format, die in ein txt-Format überführt und manuell bereinigt wurden. Für die Korrektheit dieser Aufbereitung wird keine Garantie übernommen. Für die linguistische Vorverarbeitung (Tokenisierung und Lemmatisierung) wurde der TreeTagger genutzt.
 
