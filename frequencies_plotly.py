@@ -105,6 +105,11 @@ if lemma:
     # Display the interactive plot
     st.plotly_chart(fig, use_container_width=True)
 
+    # Display the raw data
+    df_lemma_display = df_lemma.dropna(subset=["freq"])
+    with st.expander("Tabelle anzeigen"):
+        st.dataframe(df_lemma_display)    
+    
     party_options = list(df_lemma["party"].unique())
 
     default_party = "Gruene"  # Replace with your preferred default party
