@@ -131,9 +131,9 @@ with st.expander("Für Informationen zu diesem Tool hier klicken!"):
 
     Dieses interaktive Tool erlaubt die Abfrage von Worthäufigkeiten in den Wahlprogrammen zur Bundestagswahl 2025. Datengrundlage sind die (im Falle der AfD und der Linken vorläufigen) Wahlprogramme im PDF-Format, die in ein txt-Format überführt und manuell bereinigt wurden. Für die Korrektheit dieser Aufbereitung wird keine Garantie übernommen. Für die linguistische Vorverarbeitung (Tokenisierung und Lemmatisierung) wurde der TreeTagger genutzt.
 
-    ### Wie zeigt das Diagramm und wie ist es zu lesen?
+    **Wie zeigt das Diagramm und wie ist es zu lesen?**
     
-    Das Balkendiagramm zeigt die Differenz der relativen Häufigkeiten im Vergleich zum parteiübergreifenden Mittelwert. Zeigt also ein Balken beispielsweise nach oben, verwendet die Partei das Wort häufiger als der parteiübergreifende Durchschnitt; zeigt er nach unten, verwendet es das Wort seltener. 
+    Das Balkendiagramm zeigt die Differenz der relativen Häufigkeiten im Vergleich zum parteiübergreifenden Mittelwert. Zeigt also ein Balken beispielsweise nach oben, verwendet die Partei das Wort häufiger als der parteiübergreifende Durchschnitt; zeigt er nach unten, verwendet sie das Wort seltener. 
 
     Es wird mit relativen Häufigkeiten (Treffer pro Millionen Wörter) gerechnet, um die Häufigkeiten auf die jeweils unterschiedlichen Umfänge der Wahlprogramme zu skalieren und so vergleichbar zu machen. Durch Anklicken der Balken kann aber auch die absolute Häufigkeit angezeigt werden.
 
