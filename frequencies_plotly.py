@@ -6,7 +6,7 @@ from datetime import datetime
 
 today_date = datetime.today().strftime("%d.%m.%Y")
 
-st.write("### Abfrage zur Worthäufigkeit in Wahlprogrammen (Beta)")
+st.write("### Abfrage zu Worthäufigkeiten in Wahlprogrammen (Beta)")
 st.write(f"Ein Tool von [Simon Meier-Vieracker](https://tu-dresden.de/gsw/slk/germanistik/al/die-professur/inhaber), Stand {today_date}")
 
 # UI for input
