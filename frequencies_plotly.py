@@ -119,21 +119,25 @@ if lemma:
 
     kwic_output = generate_kwic(df, query_lemma=lemma, selected_party=clicked_party)
 
-    for example in kwic_output:
-        st.write(example)
+    if len(kwic_output) > 0:
+        for example in kwic_output:
+            st.write(example)
+    else:
+        st.write(f'Im Wahlprogramm dieser Partei kommt das Wort "{lemma}" nicht vor.')
 
 with st.expander("Für Informationen zu diesem Tool hier klicken!"):
     st.write("""
     **Daten und Methode**
 
-    Dieses interaktive Tool erlaubt die Abfrage von Worthäufigkeiten in den Wahlprogrammen zur Bundestagswahl 2025. Datengrundlage sind die (im Falle der AfD und der Linken vorläufigen) Wahlprogramme im PDF-Format, die in ein txt-Format überführt und manuell bereinigt wurden. Für die Korrektheit dieser Aufbereitung wird keine Garantie übernommen.
+    Dieses interaktive Tool erlaubt die Abfrage von Worthäufigkeiten in den Wahlprogrammen zur Bundestagswahl 2025. Datengrundlage sind die (im Falle der AfD und der Linken vorläufigen) Wahlprogramme im PDF-Format, die in ein txt-Format überführt und manuell bereinigt wurden. Für die Korrektheit dieser Aufbereitung wird keine Garantie übernommen. Für die linguistische Vorverarbeitung (Tokenisierung und Lemmatisierung) wurde der TreeTagger genutzt.
 
-    Das Balkendiagramm zeigt die Differenz der relativen Häufigkeiten im Vergleich zum parteiübergreifenden Mittelwert. Zeigt also ein Balken beispielsweise nach oben, verwendet die Partei das Wort häufiger als im parteiübergreifenden Durchschnitt.
+    *Wie zeigt das Diagramm und wie ist es zu lesen?*
+    
+    Das Balkendiagramm zeigt die Differenz der relativen Häufigkeiten im Vergleich zum parteiübergreifenden Mittelwert. Zeigt also ein Balken beispielsweise nach oben, verwendet die Partei das Wort häufiger als der parteiübergreifende Durchschnitt; zeigt er nach unten, verwendet es das Wort seltener. 
 
     Es wird mit relativen Häufigkeiten (Treffer pro Millionen Wörter) gerechnet, um die Häufigkeiten auf die jeweils unterschiedlichen Umfänge der Wahlprogramme zu skalieren und so vergleichbar zu machen. Durch Anklicken der Balken kann aber auch die absolute Häufigkeit angezeigt werden.
 
-    Für die linguistische Vorverarbeitung (Tokenisierung und Lemmatisierung) wurde der TreeTagger genutzt. Das Analyseskript kann auf GitHub eingesehen werden.
+    Bei der Interpretation muss man beachten, dass die An- und Abwesenheit von *Wörtern* nur zum Teil etwas über die Relevanz der mit diesen Wörtern bezeichneten *Themen* im jeweiligen Parteiprogramm aussagen kann. Für ein abschließendes Urteil ist ein Blick in die Originaltexte unumgänglich.
 
-    
-    **Es handelt sich um eine Testversion!** Feedback gerne an [simon.meier-vieracker@tu-dresden.de](mailto:simon.meier-vieracker@tu-dresden.de).
+    **Es handelt sich um eine Testversion!** Feedback gerne an [simon.meier-vieracker@tu-dresden.de](mailto:simon.meier-vieracker@tu-dresden.de). Das Analyseskript kann auf GitHub eingesehen werden, Anpassungs- und Erweiterungsvorschläge sind sehr willkommen.
     """)
