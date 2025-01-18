@@ -51,7 +51,7 @@ if lemma:
     df_lemma = df_grouped[df_grouped["lemma"] == lemma].reset_index(drop=True)
     df_size = pd.DataFrame(df["party"].value_counts(normalize=False))
     df_size = df_size.rename(columns={"party": "count"})
-    df_lemma = pd.merge(df_lemma, df_size, on='party', how='outer').fillna(0)
+    df_lemma = pd.merge(df_lemma, df_size, on='party', how='outer')
     df_lemma["relfreq"] = df_lemma["freq"] / df_lemma["count"] * 1000000
 
     mean = (df_lemma["freq"].sum() / df_lemma["count"].sum() * 1000000)
