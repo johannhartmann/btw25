@@ -210,6 +210,8 @@ if lemma:
 
     default_message = f"Showing KWIC examples for default party: {default_party}"
 
+    kwic_output = generate_kwic(df, query_lemma=lemma, selected_party=clicked_party)
+    
     if len(kwic_output) > 0:
         for example in kwic_output:
             st.write(example)
