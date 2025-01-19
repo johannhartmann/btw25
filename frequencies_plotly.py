@@ -3,6 +3,8 @@ import pandas as pd
 import plotly.express as px
 import random
 from datetime import datetime
+import numpy as np
+from collections import Counter
 
 today_date = datetime.today().strftime("%d.%m.%Y")
 
