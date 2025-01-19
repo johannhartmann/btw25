@@ -241,13 +241,13 @@ with st.expander("Für Informationen zu diesem Tool hier klicken!"):
 
     Dieses interaktive Tool erlaubt die Abfrage von Worthäufigkeiten in den Wahlprogrammen zur Bundestagswahl 2025. Datengrundlage sind die (im Falle der AfD und der Linken vorläufigen) Wahlprogramme im PDF-Format, die in ein txt-Format überführt und manuell bereinigt wurden. Für die Korrektheit dieser Aufbereitung wird keine Garantie übernommen. Für die linguistische Vorverarbeitung (Tokenisierung und Lemmatisierung) wurde der TreeTagger genutzt.
 
-    **Wie zeigt das Diagramm und wie ist es zu lesen?**
+    **Was zeigen die Balkendiagramme und wie sind sie zu lesen?**
     
-    Das Balkendiagramm zeigt die Differenz der relativen Häufigkeiten im Vergleich zum parteiübergreifenden Mittelwert. Zeigt also ein Balken beispielsweise nach oben, verwendet die Partei das Wort häufiger als der parteiübergreifende Durchschnitt; zeigt er nach unten, verwendet sie das Wort seltener. 
+    Die Balkendiagramme zeigen relative Häufigkeiten (Treffer pro Millionen Wörter), d.h. die absoluten Häufigkeiten auf die auf die jeweils unterschiedlichen Umfänge der Wahlprogramme skaliert, damit sie untereinander vergleichbar werden. Bei der mittelwertzentrierten Darstellung wird als Nullpunkt der Mittelwert angezeigt. Zeigt ein Balken nach oben, verwendet die Partei das Wort häufiger als der parteiübergreifende Durchschnitt, zeigt er nach unten, verwendet sie es seltener.
 
-    Es wird mit relativen Häufigkeiten (Treffer pro Millionen Wörter) gerechnet, um die Häufigkeiten auf die jeweils unterschiedlichen Umfänge der Wahlprogramme zu skalieren und so vergleichbar zu machen. Durch Anklicken der Balken kann aber auch die absolute Häufigkeit angezeigt werden.
+    Durch Anklicken der Balken können die absoluten Häufigkeiten angezeigt werden, außerdem können die zugrundeliegenden Daten in Tabellenform ausgegeben werden. 
 
-    Bei der Interpretation muss man beachten, dass die An- und Abwesenheit von *Wörtern* nur zum Teil etwas über die Relevanz der mit diesen Wörtern bezeichneten *Themen* im jeweiligen Parteiprogramm aussagen kann. Für ein abschließendes Urteil ist ein Blick in die Originaltexte unumgänglich.
+    **Wichtig**: Bei der Interpretation muss man beachten, dass die An- und Abwesenheit von *Wörtern* nur zum Teil etwas über die Relevanz der mit diesen Wörtern bezeichneten *Themen* im jeweiligen Parteiprogramm aussagen kann. Einen ersten Eindruck über die parteispezifische Nutzung und Bedeutung der Wörter vermitteln die Beispielbelege. Für ein abschließendes Urteil ist zudem ein Blick in die (jeweils unten verlinkten) Originaltexte unumgänglich.
 
     **Es handelt sich um eine Testversion!** Feedback gerne an [simon.meier-vieracker@tu-dresden.de](mailto:simon.meier-vieracker@tu-dresden.de). Das Analyseskript kann auf GitHub eingesehen werden, Anpassungs- und Erweiterungsvorschläge sind sehr willkommen.
     """)
