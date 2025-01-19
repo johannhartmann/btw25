@@ -95,7 +95,6 @@ def get_collocations(df, query_lemma, selected_party, context_size=5):
     df_collo["relfreq_reference"] = (df_collo.freq_reference) / df_collo.size_reference
     df_collo.loc[df_collo["relfreq_reference"] == 0, "relfreq_reference"] = 0.5
     df_collo["LogRatio"] = np.log2(df_collo.relfreq / df_collo.relfreq_reference)
-    df_collo.rename(columns={"lemma":"Lemma","freq":"Collocate Frequency"}, inplace=True)
     
     return df_collo
 
