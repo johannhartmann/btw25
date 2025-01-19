@@ -4,6 +4,7 @@ import plotly.express as px
 import random
 from datetime import datetime
 from collections import Counter
+import numpy as np
 
 today_date = datetime.today().strftime("%d.%m.%Y")
 
