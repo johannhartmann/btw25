@@ -9,6 +9,26 @@ today_date = datetime.today().strftime("%d.%m.%Y")
 st.write("### Abfrage zu Worthäufigkeiten in Wahlprogrammen (Beta)")
 st.write(f"Ein Tool von [Simon Meier-Vieracker](https://tu-dresden.de/gsw/slk/germanistik/al/die-professur/inhaber), Stand {today_date}")
 
+programs = {
+    "AfD": "https://www.afd.de/wp-content/uploads/2024/11/Leitantrag-Bundestagswahlprogramm-2025.pdf",
+    "BSW": "https://bsw-vg.de/wp-content/themes/bsw/assets/downloads/BSW%20Wahlprogramm%202025.pdf",
+    "CDU": "https://www.cdu.de/app/uploads/2025/01/km_btw_2025_wahlprogramm_langfassung_ansicht.pdf",
+    "FDP": "https://www.fdp.de/sites/default/files/2021-06/FDP_Programm_Bundestagswahl2021_1.pdf",
+    "Gruene": "https://cms.gruene.de/uploads/assets/20241216_BTW25_Programmentwurf_DINA4_digital.pdf",
+    "Linke": "https://www.die-linke.de/fileadmin/1_Partei/parteitage/Au%C3%9Ferordentlicher_Parteitag_25/Wahlprogramm_Entwurf.pdf",
+    "SPD": "https://www.spd.de/fileadmin/Dokumente/Beschluesse/Programm/2025_SPD_Regierungsprogramm.pdf"
+}
+
+flection = {
+    "AfD": "der AfD",
+    "BSW": "des BSW",
+    "CDU": "der CDU",
+    "FDP": "der FDP",
+    "Gruene": "der Grünen",
+    "Linke": "der Linken",
+    "SPD": "der SPD"    
+}
+
 # UI for input
 lemma = st.text_input("Suchwort eingeben (unflektierte Grundform): ")
 
@@ -46,6 +66,37 @@ def generate_kwic(df, query_lemma, selected_party, context_size=15, max_examples
 
     return kwic_examples
 
+def get_collocations(df, query_lemma, selected_party, context_size=5):
+    filtered_df = df[(df["lemma"] == query_lemma) & (df["party"] == selected_party)].reset_index()
+    df_party = df[df["party"] == selected_party].reset_index()
+
+    # Build collocation base from the defined context window
+    collocation_base = []
+    for _, row in filtered_df.iterrows():
+        index = row['index']  # Get the current row index
+        start = max(index - context_size, 0)  # Start of the context
+        end = min(index + context_size + 1, len(df))  # End of the context
+        context_lemmas = (
+            df.iloc[start:index]["lemma"].to_list() +  # Tokens before the current lemma
+            df.iloc[index + 1:end]["lemma"].to_list()  # Tokens after the current lemma
+        )
+        collocation_base.extend(context_lemmas)
+
+    # Calculate Hardie's Log Ratio
+    df_collo = pd.DataFrame(Counter(collocation_base).most_common(), columns=["lemma","freq"])
+    df_collo["size"] = df_collo["freq"].sum()
+    df_party_freq = df_party.groupby("lemma").size().reset_index(name='freq_total')
+    df_collo = df_collo.merge(df_party_freq, on="lemma")
+    df_collo["freq_reference"] = df_collo["freq_total"] - df_collo["freq"]
+    df_collo["size_reference"] = df_collo["freq_reference"].sum()
+    df_collo["relfreq"] = df_collo.freq / df_collo.size
+    df_collo["relfreq_reference"] = (df_collo.freq_reference) / df_collo.size_reference
+    df_collo.loc[df_collo["relfreq_reference"] == 0, "relfreq_reference"] = 0.5
+    df_collo["LogRatio"] = np.log2(df_collo.relfreq / df_collo.relfreq_reference)
+    df_collo.rename(columns={"lemma":"Lemma","freq":"Collocate Frequency"}, inplace=True)
+    
+    return df_collo
+
 if lemma:
     # Filter data for the input lemma
     df_lemma = df_grouped[df_grouped["lemma"] == lemma].reset_index(drop=True)
@@ -70,14 +121,15 @@ if lemma:
         'SPD': '#E3000F'
     }
 
-    # Create an interactive bar plot using Plotly
+    # Create interactive bar plots using Plotly
+    # First variant: Relative frequencies
     fig = px.bar(
         df_lemma,
         x="party",
-        y="relfreq_centered",
+        y="relfreq",
         color="party",
         color_discrete_map=party_colors,
-        labels={"relfreq_centered": "Differenz der relativen Häufigkeit"},
+        labels={"relfreq": "Relative Häufigkeit"},
         title=f"Relative Häufigkeiten von '{lemma}'",
         hover_data={"freq": True, "relfreq": True, "relfreq_centered": False},
         custom_data=["relfreq","freq"]
@@ -102,9 +154,45 @@ if lemma:
         )
     )
     
-    # Display the interactive plot
-    st.plotly_chart(fig, use_container_width=True)
+    # Second variant: Mean-centered relative frequencies
+    fig2 = px.bar(
+        df_lemma,
+        x="party",
+        y="relfreq_centered",
+        color="party",
+        color_discrete_map=party_colors,
+        labels={"relfreq_centered": "Abweichung der relativen Häufigkeit"},
+        title=f"Relative Häufigkeiten von '{lemma}' (mittelwertzentriert)",
+        hover_data={"freq": True, "relfreq": True, "relfreq_centered": False},
+        custom_data=["relfreq","freq"]
+    )
 
+    fig2.update_layout(
+        #autosize=True,
+        margin={"l": 40, "r": 40, "t": 60, "b": 00},
+        title_y=.9,
+        showlegend=False,
+        xaxis=dict(
+           tickangle=-45,
+           title=""
+        )
+    )
+
+    fig2.update_traces(
+        hovertemplate=(
+            "<b>%{x}</b><br>"  # Party name
+            "Relative Häufigkeit: %{customdata[0]:.2f}<br>"  # 'relfreq' formatted to 2 decimals
+            "Absolute Häufigkeit: %{customdata[1]}"  # 'freq' displayed normally
+        )
+    )
+
+    # Display the interactive plots in two tabs
+    tab1, tab2 = st.tabs(["Relative Häufigkeiten", "Relative Häufigkeiten (mittelwertzentriert)"])
+    with tab1:
+        st.plotly_chart(fig, use_container_width=True)     
+    with tab2:
+        st.plotly_chart(fig2, use_container_width=True)    
+    
     # Display the raw data
     df_lemma_display = df_lemma.dropna(subset=["freq"])
     with st.expander("Tabelle anzeigen"):
@@ -122,13 +210,27 @@ if lemma:
 
     default_message = f"Showing KWIC examples for default party: {default_party}"
 
-    kwic_output = generate_kwic(df, query_lemma=lemma, selected_party=clicked_party)
-
     if len(kwic_output) > 0:
         for example in kwic_output:
             st.write(example)
     else:
-        st.write(f'Im Wahlprogramm dieser Partei kommt das Wort "{lemma}" nicht vor.')
+        st.write(f'Im Wahlprogramm {flection[clicked_party]} kommt das Wort "{lemma}" nicht vor.')
+
+    # Get Collocations and display if table is not empty
+    collo = get_collocations(df, query_lemma=lemma, selected_party=clicked_party)
+    collo_filtered = collo[(collo["LogRatio"] > 0) & (collo["freq"] > 2)]
+    collo_filtered.rename(columns={"lemma":"Lemma","freq":"Collocate Frequency"}, inplace=True)
+    collo_filtered = collo_filtered[["Lemma","Collocate Frequency","LogRatio"]].sort_values(by="LogRatio", ascending=False)
+    if len(collo_filtered) > 0:
+        with st.expander(f"Kollokationen von '{lemma}' im Programm {flection[clicked_party]} anzeigen"):
+            st.dataframe(collo_filtered)
+
+    st.divider()
+
+    # Print link to original text
+    st.write(f"Das ganze Wahlprogramm {flection[clicked_party]} kann [hier]({programs[clicked_party]}) eingesehen werden.")
+
+    st.divider()
 
 with st.expander("Für Informationen zu diesem Tool hier klicken!"):
     st.write("""
