@@ -245,9 +245,13 @@ with st.expander("Für Informationen zu diesem Tool hier klicken!"):
     
     Die Balkendiagramme zeigen relative Häufigkeiten (Treffer pro Millionen Wörter), d.h. die absoluten Häufigkeiten auf die auf die jeweils unterschiedlichen Umfänge der Wahlprogramme skaliert, damit sie untereinander vergleichbar werden. Bei der mittelwertzentrierten Darstellung wird als Nullpunkt der Mittelwert angezeigt. Zeigt ein Balken nach oben, verwendet die Partei das Wort häufiger als der parteiübergreifende Durchschnitt, zeigt er nach unten, verwendet sie es seltener.
 
-    Durch Anklicken der Balken können die absoluten Häufigkeiten angezeigt werden, außerdem können die zugrundeliegenden Daten in Tabellenform ausgegeben werden. 
+    Durch Anklicken der Balken können die absoluten Häufigkeiten angezeigt werden, außerdem können die zugrundeliegenden Daten in Tabellenform ausgegeben werden.
 
     **Wichtig**: Bei der Interpretation muss man beachten, dass die An- und Abwesenheit von *Wörtern* nur zum Teil etwas über die Relevanz der mit diesen Wörtern bezeichneten *Themen* im jeweiligen Parteiprogramm aussagen kann. Einen ersten Eindruck über die parteispezifische Nutzung und Bedeutung der Wörter vermitteln die Beispielbelege. Für ein abschließendes Urteil ist zudem ein Blick in die (jeweils unten verlinkten) Originaltexte unumgänglich.
+
+    **Was sind Kollokationen?**
+
+    Bei hinreichend frequenten Wörtern werden unter den Beispielbelegen auch Kollokationen angezeigt. Das sind Wörter, die im unmittelbaren Kontext des Suchwortes relativ häufiger vorkommen als im restlichen Text. Kollokationen zeigen also häufige Wortkombinationen an (etwa 'soziale Gerechtigkeit') und können im Verbund einen Eindruck von parteispezifischen Wortgebräuchen vermitteln. Das genutzte Assoziationsmaß ist LogRatio (die logarithmierte Ratio der relativen Häufigkeiten) bei einer Kontextgröße von 5 Wörtern links und rechts und eine Mindestfrequenz von 3.
 
     **Es handelt sich um eine Testversion!** Feedback gerne an [simon.meier-vieracker@tu-dresden.de](mailto:simon.meier-vieracker@tu-dresden.de). Das Analyseskript kann auf GitHub eingesehen werden, Anpassungs- und Erweiterungsvorschläge sind sehr willkommen.
     """)
