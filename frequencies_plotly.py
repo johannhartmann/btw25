@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.express as px
 import random
 from datetime import datetime
-import numpy as np
 from collections import Counter
 
 today_date = datetime.today().strftime("%d.%m.%Y")
@@ -67,37 +66,6 @@ def generate_kwic(df, query_lemma, selected_party, context_size=15, max_examples
         kwic_examples.append(kwic_line)
 
     return kwic_examples
-
-def get_collocations(df, query_lemma, selected_party, context_size=5):
-    filtered_df = df[(df["lemma"] == query_lemma) & (df["party"] == selected_party)].reset_index()
-    df_party = df[df["party"] == selected_party].reset_index()
-
-    # Build collocation base from the defined context window
-    collocation_base = []
-    for _, row in filtered_df.iterrows():
-        index = row['index']  # Get the current row index
-        start = max(index - context_size, 0)  # Start of the context
-        end = min(index + context_size + 1, len(df))  # End of the context
-        context_lemmas = (
-            df.iloc[start:index]["lemma"].to_list() +  # Tokens before the current lemma
-            df.iloc[index + 1:end]["lemma"].to_list()  # Tokens after the current lemma
-        )
-        collocation_base.extend(context_lemmas)
-
-    # Calculate Hardie's Log Ratio
-    df_collo = pd.DataFrame(Counter(collocation_base).most_common(), columns=["lemma","freq"])
-    df_collo["size"] = df_collo["freq"].sum()
-    df_party_freq = df_party.groupby("lemma").size().reset_index(name='freq_total')
-    df_collo = df_collo.merge(df_party_freq, on="lemma")
-    df_collo["freq_reference"] = df_collo["freq_total"] - df_collo["freq"]
-    df_collo["size_reference"] = df_collo["freq_reference"].sum()
-    df_collo["relfreq"] = df_collo.freq / df_collo.size
-    df_collo["relfreq_reference"] = (df_collo.freq_reference) / df_collo.size_reference
-    df_collo.loc[df_collo["relfreq_reference"] == 0, "relfreq_reference"] = 0.5
-    df_collo["LogRatio"] = np.log2(df_collo.relfreq / df_collo.relfreq_reference)
-    df_collo.rename(columns={"lemma":"Lemma","freq":"Collocate Frequency"}, inplace=True)
-    
-    return df_collo
 
 if lemma:
     # Filter data for the input lemma
@@ -219,15 +187,6 @@ if lemma:
             st.write(example)
     else:
         st.write(f'Im Wahlprogramm {flection[clicked_party]} kommt das Wort "{lemma}" nicht vor.')
-
-    # Get Collocations and display if table is not empty
-    collo = get_collocations(df, query_lemma=lemma, selected_party=clicked_party)
-    collo_filtered = collo[(collo["LogRatio"] > 0) & (collo["freq"] > 2)]
-    collo_filtered.rename(columns={"lemma":"Lemma","freq":"Collocate Frequency"}, inplace=True)
-    collo_filtered = collo_filtered[["Lemma","Collocate Frequency","LogRatio"]].sort_values(by="LogRatio", ascending=False)
-    if len(collo_filtered) > 0:
-        with st.expander(f"Kollokationen von '{lemma}' im Programm {flection[clicked_party]} anzeigen"):
-            st.dataframe(collo_filtered)
 
     st.divider()
 
