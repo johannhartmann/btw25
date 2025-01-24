@@ -42,7 +42,7 @@ def create_heatmap(df, selected_pos, number_of_rows):
 
 	plot_height = .24 * number_of_rows
 	
-	plt.figure(figsize=(3, plotheight))
+	plt.figure(figsize=(3, plot_height))
 	sns.set_theme(style="whitegrid")
 	chart = sns.heatmap(data=matrix, annot=False, cmap="Reds")
 	chart.set_xlabel('')
