@@ -35,7 +35,7 @@ flection = {
 lemma = st.text_input("Suchwort eingeben (unflektierte Grundform): ")
 
 # Load data
-df = pd.read_csv("btw25.tsv", sep="\t", quoting=3)
+df = pd.read_csv("btw25_corrected.tsv", sep="\t", quoting=3)
 
 # Group data by lemma and party
 df_grouped = df.groupby(['lemma', 'party']).size().reset_index(name='freq')
