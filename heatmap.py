@@ -11,9 +11,9 @@ today_date = datetime.today().strftime("%d.%m.%Y")
 
 st.write("### Wahlprogramm-Heatmaps zur Bundestagswahl 2025")
 
-st.write("Diese Heatmaps zeigen für verschiedene Wortarten die relativen Häufigkeiten für die jeweils 25 häufigsten Wörter in den Wahlprogrammen der jeweiligen Partei.")
+st.write("Diese Heatmaps zeigen für verschiedene Wortarten die relativen Häufigkeiten für die 25 häufigsten Wörter in den Wahlprogrammen der jeweiligen Partei.")
 
-st.caption(f"Ein Tool von [Simon Meier-Vieracker](https://tu-dresden.de/gsw/slk/germanistik/al/die-professur/inhaber), Stand {today_date}")
+st.caption(f"Ein Tool von [Simon Meier-Vieracker](https://tu-dresden.de/gsw/slk/germanistik/al/die-professur/inhaber), Stand {today_date}. Bitte beachten Sie die Infobox am Ende dieser Seite.")
 
 
 pos_dict = {
@@ -62,7 +62,7 @@ with st.expander("Für Informationen zu diesem Tool hier klicken!"):
     st.write("""
     ### Daten und Methode
 
-    Die Heatmaps zeigen die relativen Häufigkeiten der jeweils 25 häufigsten Wörter in den Wahlprogrammen zur Bundestagswahl 2025. Datengrundlage sind die (im Falle der AfD und der Linken vorläufigen) Wahlprogramme im PDF-Format, die in ein txt-Format überführt und manuell bereinigt wurden. Für die Korrektheit dieser Aufbereitung wird keine Garantie übernommen.
+    Die Heatmaps zeigen die relativen Häufigkeiten jener 25 Wörter, die über alle Wahlprogramme zur Bundestagswahl 2025 hinweg am häufigsten vorkommen. Datengrundlage sind die (im Falle der AfD und der Linken vorläufigen) Wahlprogramme im PDF-Format, die in ein txt-Format überführt und manuell bereinigt wurden. Für die Korrektheit dieser Aufbereitung wird keine Garantie übernommen. Berücksichtigt wurden nur Parteien, die im letzten Bundestag vertreten waren und/oder realistische Chancen auf Einzug in den nächsten haben. 
 
     Für die linguistische Vorverarbeitung (Tokenisierung, Lemmatisierung und Part-of-Speech-Tagging) wurde der TreeTagger genutzt. Die Auswertung beruht auf lemmatisierter Basis, d.h. flektierte Formen wurden in die Grundform überführt. Abgetrennte Partikelverbzusätze (etwa in "lehnen wir ab") wurden nachträglich wieder angefügt.
 
