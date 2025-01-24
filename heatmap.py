@@ -15,6 +15,7 @@ st.write("Diese Heatmaps zeigen für verschiedene Wortarten die relativen Häufi
 
 st.caption(f"Ein Tool von [Simon Meier-Vieracker](https://tu-dresden.de/gsw/slk/germanistik/al/die-professur/inhaber), Stand {today_date}. Bitte beachten Sie die Infobox am Ende dieser Seite.")
 
+number_of_rows = st.slider("Wieviele Wörter sollen angezeigt werden?", 25, 50, 25)
 
 pos_dict = {
 	"Substantive":"NN",
@@ -22,14 +23,14 @@ pos_dict = {
 	"Verben":"VV"
 }
 
-def create_heatmap(df, selected_pos, number_of_rows=25):
+def create_heatmap(df, selected_pos, number_of_rows):
 	df_filtered = df[df.pos.str.contains(pos_dict[selected_pos])]
 	df_grouped = df_filtered.groupby(by=["lemma", "party"]).size().reset_index(name="freq")
 	df_filtered = df_grouped[~df_grouped['lemma'].isin(["Freie", "Demokrat"])].copy()
 	df_filtered['rel_freq'] = df_filtered.groupby('party')['freq'].transform(lambda x: x / x.sum() * 100)
 
 	# Get top lemmas
-	top_lemmas_list = df_filtered.groupby('lemma')['rel_freq'].sum().nlargest(25).index
+	top_lemmas_list = df_filtered.groupby('lemma')['rel_freq'].sum().nlargest(number_of_rows).index
 	top_df = df_filtered[df_filtered['lemma'].isin(top_lemmas_list)]
 
 	# Create pivot table for heatmap
@@ -39,8 +40,10 @@ def create_heatmap(df, selected_pos, number_of_rows=25):
 	matrix_table = top_df.pivot_table(index='lemma', columns='party', values='freq')
 	matrix_table = matrix_table.fillna(0)
 
-	plt.figure(figsize=(3, 6))
-	sns.set_theme(style="darkgrid")
+	plot_height = .24 * number_of_rows
+	
+	plt.figure(figsize=(3, plotheight))
+	sns.set_theme(style="whitegrid")
 	chart = sns.heatmap(data=matrix, annot=False, cmap="Reds")
 	chart.set_xlabel('')
 	chart.set_ylabel('')
