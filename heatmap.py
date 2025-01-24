@@ -59,7 +59,7 @@ tab_objects = st.tabs(tabs)
 
 for tab, pos in zip(tab_objects, tabs):
     with tab:
-        create_heatmap(df, pos)
+        create_heatmap(df, pos, number_of_rows)
 
 with st.expander("Für Informationen zu diesem Tool hier klicken!"):
     st.write("""
