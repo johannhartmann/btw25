@@ -4,7 +4,9 @@ import csv
 import requests
 import io
 import sys
+import json
 from fake_useragent import UserAgent
+import re
 
 # Load spaCy model for German
 nlp = spacy.load("de_core_news_sm")
@@ -26,6 +28,16 @@ def load_sentiws():
     load_file("SentiWS_v2.0_Negative.txt", negative)
 
     return positive, negative
+
+def clean_text(text):
+    """Clean text by removing unwanted characters like separators and excessive punctuation."""
+    print("Cleaning text...")
+    # Remove sequences of dots, dashes, or other non-alphanumeric characters
+    text = re.sub(r"[\.-]{2,}", " ", text)
+    # Remove excessive whitespace
+    text = re.sub(r"\s+", " ", text).strip()
+    print("Text cleaning complete.")
+    return text
 
 def calculate_sentiments(text, positive, negative):
     """Calculate sentiment counts for the given text using SentiWS."""
@@ -65,6 +77,7 @@ def extract_text_from_pdf_url(url):
 def process_text(text, party, year):
     """Process text with spaCy and create structured data."""
     print(f"Processing text for party {party}, year {year}...")
+    text = clean_text(text)  # Clean the text before processing
     doc = nlp(text)
     data = []
     for token in doc:
@@ -100,44 +113,9 @@ def save_sentiments_to_tsv(sentiments, output_file):
     print(f"Sentiments saved to {output_file}.")
 
 def main():
-    """Main function to process a list of PDFs from predefined URLs and output results as TSV."""
-    programs = [
-        {
-            "Party": "Volt",
-            "Year": 2025,
-            "URL": "https://voltdeutschland.org/storage/assets-btw25/volt-programm-bundestagswahl-2025.pdf"
-        },
-        {
-            "Party": "CDU",
-            "Year": 2025,
-            "URL": "https://www.cdu.de/app/uploads/2025/01/km_btw_2025_wahlprogramm_langfassung_ansicht.pdf"
-        },
-        {
-            "Party": "SPD",
-            "Year": 2025,
-            "URL": "https://www.spd.de/fileadmin/Dokumente/Beschluesse/Programm/2025_SPD_Regierungsprogramm.pdf"
-        },
-        {
-            "Party": "FDP",
-            "Year": 2025,
-            "URL": "https://www.fdp.de/sites/default/files/2024-12/fdp-wahlprogramm_2025.pdf"
-        },
-        {
-            "Party": "AfD",
-            "Year": 2025,
-            "URL": "https://www.afd.de/wp-content/uploads/2024/11/Leitantrag-Bundestagswahlprogramm-2025.pdf"
-        },
-        {
-            "Party": "Gruene",
-            "Year": 2025,
-            "URL": "https://cms.gruene.de/uploads/assets/20241216_BTW25_Programmentwurf_DINA4_digital.pdf"
-        },
-        {
-            "Party": "Linke",
-            "Year": 2025,
-            "URL": "https://www.die-linke.de/fileadmin/1_Partei/parteitage/Au%C3%9Ferordentlicher_Parteitag_25/Wahlprogramm_Entwurf.pdf"
-        }
-    ]
+    """Main function to process a list of PDFs from a JSON file and output results as TSV."""
+    with open("party.json", "r", encoding="utf-8") as json_file:
+        programs = json.load(json_file)
 
     output_file = "btw25.tsv"
     sentiment_output_file = "sent25.tsv"
@@ -183,3 +161,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    print("Script completed.")
